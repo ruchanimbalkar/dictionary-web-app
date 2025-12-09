@@ -1,9 +1,23 @@
 import { useState } from "react";
 import "./App.css";
+import Switch from "react-switch";
+import { FaMoon } from "react-icons/fa";
+import { FaRegMoon } from "react-icons/fa";
 
 function App() {
+  let filledMoonCrescent = <FaMoon />;
+  let emptyMoonCrescent = <FaRegMoon />;
   const [formData, setFormData] = useState({ searchTerm: "" });
   const [dictionaryData, setDictionaryData] = useState(null);
+
+  const [lightMode, setLightMode] = useState(true);
+  const handleChangeMode = () => {
+    setLightMode(!lightMode);
+    let mode = lightMode ? "day" : "night";
+    document.body.classList.remove("day");
+    document.body.classList.remove("night");
+    document.body.classList.add(mode);
+  };
   //handle functions
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,11 +52,27 @@ function App() {
     <>
       <header>
         <img src="/logo.svg" alt="book" />
-        <form>
-          <select>
-            <option>Serif</option>
-          </select>
-        </form>
+
+        <div className="form-mode">
+          <form>
+            <select>
+              <option>Serif</option>
+              <option>Serif</option>
+              <option>Serif</option>
+            </select>
+          </form>
+
+          <Switch
+            onChange={handleChangeMode}
+            checked={lightMode}
+            offColor="#4d4d4d"
+            onColor="#999999"
+            offHandleColor="#262626"
+            onHandleColor="#e6e6e6"
+            checkedIcon={emptyMoonCrescent}
+            uncheckedIcon={filledMoonCrescent}
+          />
+        </div>
       </header>
       <form onSubmit={handleSubmit}>
         <search>

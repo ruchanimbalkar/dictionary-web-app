@@ -4,3 +4,25 @@
   padding: 2rem;
   text-align: center;
 }
+
+.day {
+  background-color: white;
+  color: black;
+}
+
+.night {
+  background-color: black;
+  color: white;
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.form-mode {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
