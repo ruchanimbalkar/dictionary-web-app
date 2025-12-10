@@ -128,7 +128,19 @@ function App() {
               <li key={"index_" + index}>{item.definition}</li>
             ))}
           </ul>
-          <h5>{dictionaryData[0].meanings[0].synonyms}</h5>
+          <div>
+            {dictionaryData[0].meanings[0].synonyms.length > 0 && (
+              <div>
+                <h5>Synonyms </h5>
+                <ol className="result-list">
+                  {dictionaryData[0].meanings[0].synonyms.map((item, index) => (
+                    <li key={"index_" + index}>{item}</li>
+                  ))}
+                </ol>
+              </div>
+            )}
+          </div>
+
           <div className="h3-hr">
             <h3>
               <em>{dictionaryData[0].meanings[1].partOfSpeech}</em>
@@ -142,8 +154,7 @@ function App() {
             ))}
           </ul>
           <p>
-            {" "}
-            Source{" "}
+            Source
             <a href={dictionaryData[0].sourceUrls}>
               {dictionaryData[0].sourceUrls}
             </a>
