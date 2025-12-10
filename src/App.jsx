@@ -11,6 +11,7 @@ function App() {
   const [dictionaryData, setDictionaryData] = useState(null);
   const [fontClass, setFontClass] = useState("serif");
   const [lightMode, setLightMode] = useState(true);
+  const [audioPath, setAudioPath] = useState("");
   const handleChangeMode = () => {
     setLightMode(!lightMode);
     let mode = lightMode ? "day" : "night";
@@ -29,7 +30,6 @@ function App() {
     getDictionaryData();
     event.preventDefault();
     console.log(formData, "formData");
-    setWord(formData.searchTerm);
     setFormData({
       searchTerm: "",
     });
@@ -42,7 +42,19 @@ function App() {
       );
       const data = await response.json();
       console.log("data", data);
+
+      //set dictionary data
       setDictionaryData(data);
+      console.log("dictionaryData", dictionaryData);
+      //map over the phonetics array and see if audio exists in one of the array elements
+      dictionaryData[0].phonetics.map((item) => {
+        if (item.audio.length > 1) {
+          //set audio
+          setAudioPath(item.audio);
+        } else {
+          setAudioPath("");
+        }
+      });
     } catch (error) {
       console.log("Error: " + error.message);
     }
@@ -94,13 +106,12 @@ function App() {
         <div className="result-div">
           <h1>{dictionaryData[0].word}</h1>
           <h2>{dictionaryData[0].phonetic}</h2>
-          <audio controls>
-            <source
-              src={dictionaryData[0].phonetics[2].audio}
-              type="audio/mpeg"
-            />
-            Your browser does not support the audio element.
-          </audio>
+          {audioPath.length > 0 && (
+            <audio controls>
+              <source src={audioPath} type="audio/mpeg" />
+              Your browser does not support the audio element.
+            </audio>
+          )}
           <div className="h3-hr">
             <h3>
               <em>{dictionaryData[0].meanings[0].partOfSpeech}</em>
@@ -110,8 +121,8 @@ function App() {
 
           <h4>Meaning</h4>
           <ul className="result-list">
-            {dictionaryData[0].meanings[0].definitions.map((item, key) => (
-              <li index={"index_" + key}>{item.definition}</li>
+            {dictionaryData[0].meanings[0].definitions.map((item, index) => (
+              <li key={"index_" + index}>{item.definition}</li>
             ))}
           </ul>
           <h5>{dictionaryData[0].meanings[0].synonyms}</h5>
@@ -123,8 +134,8 @@ function App() {
           </div>
           <h4>Meaning</h4>
           <ul className="result-list">
-            {dictionaryData[0].meanings[1].definitions.map((item, key) => (
-              <li index={"index_" + key}>{item.definition}</li>
+            {dictionaryData[0].meanings[1].definitions.map((item, index) => (
+              <li key={"index_" + index}>{item.definition}</li>
             ))}
           </ul>
           <p>

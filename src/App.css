@@ -21,13 +21,8 @@ header {
   flex-direction: row;
   gap: 0.5rem;
 }
-.h3-hr {
-  display: inline-flexbox;
-  justify-content: center;
-  align-content: center;
-  align-items: center;
-}
 
+/* Reference : https://codepen.io/ruchan/pen/jEqdZxp */
 h3 {
   display: inline-block;
   text-align: left;
