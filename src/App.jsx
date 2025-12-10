@@ -9,7 +9,7 @@ function App() {
   let emptyMoonCrescent = <FaRegMoon />;
   const [formData, setFormData] = useState({ searchTerm: "" });
   const [dictionaryData, setDictionaryData] = useState(null);
-
+  const [fontClass, setFontClass] = useState("serif");
   const [lightMode, setLightMode] = useState(true);
   const handleChangeMode = () => {
     setLightMode(!lightMode);
@@ -49,16 +49,20 @@ function App() {
   };
 
   return (
-    <>
+    <div className={fontClass}>
       <header>
         <img src="/logo.svg" alt="book" />
 
-        <div className="form-mode">
+        <div className="form-nd-switch">
           <form>
-            <select>
-              <option>Serif</option>
-              <option>Serif</option>
-              <option>Serif</option>
+            <select
+              name="fonts"
+              defaultValue="serif"
+              onChange={(e) => setFontClass(e.target.value)}
+            >
+              <option value="serif">Serif</option>
+              <option value="san-serif">San Serif</option>
+              <option value="monospace">Monospace</option>
             </select>
           </form>
 
@@ -97,21 +101,32 @@ function App() {
             />
             Your browser does not support the audio element.
           </audio>
-          <h3>{dictionaryData[0].meanings[0].partOfSpeech}</h3>
-          <h4>Meaning</h4> <hr />
-          <ol>
+          <div className="h3-hr">
+            <h3>
+              <em>{dictionaryData[0].meanings[0].partOfSpeech}</em>
+            </h3>{" "}
+            <hr />
+          </div>
+
+          <h4>Meaning</h4>
+          <ul className="result-list">
             {dictionaryData[0].meanings[0].definitions.map((item, key) => (
               <li index={"index_" + key}>{item.definition}</li>
             ))}
-          </ol>
+          </ul>
           <h5>{dictionaryData[0].meanings[0].synonyms}</h5>
-          <h3>{dictionaryData[0].meanings[1].partOfSpeech}</h3>
-          <h4>Meaning</h4> <hr />
-          <ol>
+          <div className="h3-hr">
+            <h3>
+              <em>{dictionaryData[0].meanings[1].partOfSpeech}</em>
+            </h3>{" "}
+            <hr />
+          </div>
+          <h4>Meaning</h4>
+          <ul className="result-list">
             {dictionaryData[0].meanings[1].definitions.map((item, key) => (
               <li index={"index_" + key}>{item.definition}</li>
             ))}
-          </ol>
+          </ul>
           <p>
             {" "}
             Source{" "}
@@ -121,7 +136,7 @@ function App() {
           </p>
         </div>
       )}
-    </>
+    </div>
   );
 }
 
