@@ -5,6 +5,7 @@ import { FaMoon } from "react-icons/fa";
 import { FaRegMoon } from "react-icons/fa";
 
 function App() {
+  //Save react icons as jsx elements
   let filledMoonCrescent = <FaMoon />;
   let emptyMoonCrescent = <FaRegMoon />;
   const [formData, setFormData] = useState({ searchTerm: "" });
@@ -30,6 +31,7 @@ function App() {
     getDictionaryData();
     event.preventDefault();
     console.log(formData, "formData");
+    //reset form data
     setFormData({
       searchTerm: "",
     });
@@ -49,6 +51,7 @@ function App() {
       //map over the phonetics array and see if audio exists in one of the array elements
       dictionaryData[0].phonetics.map((item) => {
         if (item.audio.length > 1) {
+          console.log("item", item);
           //set audio
           setAudioPath(item.audio);
         } else {
@@ -96,7 +99,7 @@ function App() {
             type="text"
             name="searchTerm"
             id="searchTerm"
-            value={FormData.searchTerm}
+            value={formData.searchTerm}
             onChange={handleChange}
           />
           <img src="/icon-search.svg" />
