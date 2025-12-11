@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import Switch from "react-switch";
 import { FaMoon } from "react-icons/fa";
@@ -8,11 +8,14 @@ function App() {
   //Save react icons as jsx elements
   let filledMoonCrescent = <FaMoon />;
   let emptyMoonCrescent = <FaRegMoon />;
-  const [formData, setFormData] = useState({ searchTerm: "" });
+  const [formData, setFormData] = useState({ searchWord: "" });
   const [dictionaryData, setDictionaryData] = useState(null);
   const [fontClass, setFontClass] = useState("serif");
   const [lightMode, setLightMode] = useState(true);
   const [audioPath, setAudioPath] = useState("");
+  // const [searchTerm, setSearchTerm] = useState("");
+  const [audioJSX, setAudioJSX] = useState("");
+  //handle functions
   const handleChangeMode = () => {
     setLightMode(!lightMode);
     let mode = lightMode ? "day" : "night";
@@ -20,7 +23,7 @@ function App() {
     document.body.classList.remove("night");
     document.body.classList.add(mode);
   };
-  //handle functions
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     console.log(name, value);
@@ -28,28 +31,28 @@ function App() {
   };
 
   const handleSubmit = (event) => {
+    // setSearchTerm(formData.searchWord);
     getDictionaryData();
     event.preventDefault();
     console.log(formData, "formData");
     //reset form data
     setFormData({
-      searchTerm: "",
+      searchWord: "",
     });
   };
 
   const getDictionaryData = async () => {
+    //clear the audio path
+    setAudioPath("");
     try {
       const response = await fetch(
-        `https://api.dictionaryapi.dev/api/v2/entries/en/${formData.searchTerm}`
+        `https://api.dictionaryapi.dev/api/v2/entries/en/${formData.searchWord}`
       );
       const data = await response.json();
       console.log("data", data);
 
-      //set dictionary data
-      setDictionaryData(data);
-      console.log("dictionaryData", dictionaryData);
       //map over the phonetics array and see if audio exists in one of the array elements
-      dictionaryData[0].phonetics.map((item) => {
+      data[0].phonetics.map((item) => {
         if (item.audio.length > 1) {
           console.log("item", item);
           //set audio
@@ -58,10 +61,26 @@ function App() {
           setAudioPath("");
         }
       });
+      //set dictionary data
+      setDictionaryData(data);
+      console.log("dictionaryData", dictionaryData);
     } catch (error) {
       console.log("Error: " + error.message);
     }
   };
+
+  const audioJSXFunction = () => {
+    let tempJSX = audioPath.length > 0 && (
+      <audio controls>
+        <source src={audioPath} type="audio/mpeg" />
+        Your browser does not support the audio element.
+      </audio>
+    );
+    setAudioJSX(tempJSX);
+  };
+  useEffect(() => {
+    audioJSXFunction();
+  }, [audioPath]);
 
   return (
     <div className={fontClass}>
@@ -97,9 +116,9 @@ function App() {
         <search>
           <input
             type="text"
-            name="searchTerm"
-            id="searchTerm"
-            value={formData.searchTerm}
+            name="searchWord"
+            id="searchWord"
+            value={formData.searchWord}
             onChange={handleChange}
           />
           <img src="/icon-search.svg" />
@@ -109,12 +128,7 @@ function App() {
         <div className="result-div">
           <h1>{dictionaryData[0].word}</h1>
           <h2>{dictionaryData[0].phonetic}</h2>
-          {audioPath.length > 0 && (
-            <audio controls>
-              <source src={audioPath} type="audio/mpeg" />
-              Your browser does not support the audio element.
-            </audio>
-          )}
+          {audioJSX}
           <div className="h3-hr">
             <h3>
               <em>{dictionaryData[0].meanings[0].partOfSpeech}</em>
