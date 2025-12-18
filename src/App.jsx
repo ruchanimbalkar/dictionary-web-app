@@ -131,7 +131,10 @@ function App() {
           {audioJSX}
           <div className="h3-hr">
             <h3>
-              <em>{dictionaryData[0].meanings[0].partOfSpeech}</em>
+              <em>
+                {dictionaryData[0].meanings[0].partOfSpeech == "noun" &&
+                  dictionaryData[0].meanings[0].partOfSpeech}
+              </em>
             </h3>{" "}
             <hr />
           </div>
@@ -155,24 +158,30 @@ function App() {
             )}
           </div>
 
-          <div className="h3-hr">
-            <h3>
-              <em>{dictionaryData[0].meanings[1].partOfSpeech}</em>
-            </h3>{" "}
-            <hr />
-          </div>
-          <h4>Meaning</h4>
-          <ul className="result-list">
-            {dictionaryData[0].meanings[1].definitions.map((item, index) => (
-              <li key={"index_" + index}>{item.definition}</li>
-            ))}
-          </ul>
-          <p>
-            Source
-            <a href={dictionaryData[0].sourceUrls}>
-              {dictionaryData[0].sourceUrls}
-            </a>
-          </p>
+          {dictionaryData[0].meanings.length > 1 && (
+            <>
+              <div className="h3-hr">
+                <h3>
+                  <em>{dictionaryData[0].meanings[1].partOfSpeech}</em>
+                </h3>
+                <hr />
+              </div>
+              <h4>Meaning</h4>
+              <ul className="result-list">
+                {dictionaryData[0].meanings[1].definitions.map(
+                  (item, index) => (
+                    <li key={"index_" + index}>{item.definition}</li>
+                  )
+                )}
+              </ul>
+              <p>
+                Source :
+                <a href={dictionaryData[0].sourceUrls}>
+                  {dictionaryData[0].sourceUrls}
+                </a>
+              </p>
+            </>
+          )}
         </div>
       )}
     </div>
